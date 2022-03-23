@@ -12,6 +12,6 @@ var port string
 
 func main() {
 	flag.StringVar(&port, "port", "29403", "server port")
-	http.HandleFunc("/", internal.HookHanlder)
+	http.HandleFunc("/", internal.HookHandler)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }

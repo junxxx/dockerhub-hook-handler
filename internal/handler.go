@@ -41,7 +41,7 @@ type Payload struct {
 	} `json:"repository"`
 }
 
-func HookHanlder(w http.ResponseWriter, r *http.Request) {
+func HookHandler(w http.ResponseWriter, r *http.Request) {
 	var payload Payload
 	err := json.NewDecoder(r.Body).Decode(&payload)
 	if err != nil {
