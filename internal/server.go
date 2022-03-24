@@ -6,6 +6,8 @@ import (
 	"log"
 	"net/http"
 	"strings"
+
+	"github.com/junxxx/dockerhub-webhook/internal/runner"
 )
 
 type state int
@@ -17,14 +19,14 @@ const (
 )
 
 // response callback state
-var stateText = map[state]string{
+var StateText = map[state]string{
 	Success:  "success",
 	Failure:  "failure",
 	Cuserror: "error",
 }
 
 // callbask payload
-type callBackPayload struct {
+type CallBackPayload struct {
 	State       string `json:"state"`
 	Description string `json:"description"`
 	Context     string `json:"context"`
@@ -37,7 +39,9 @@ type Payload struct {
 	// PushData    struct {
 	// } `json:"push_data"`
 	Repository struct {
-		RepoUrl string `json:"repo_url"`
+		RepoUrl  string `json:"repo_url"`
+		Name     string `json:"name"`
+		RepoName string `json:"repo_name"`
 	} `json:"repository"`
 }
 
@@ -54,6 +58,7 @@ func HookHandler(w http.ResponseWriter, r *http.Request) {
 
 // run the correspond task
 func runTask(p Payload) {
+	runner.RunAndWait("touch", "test.txt")
 	fmt.Println("pull the latest image and run it")
 }
 
