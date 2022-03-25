@@ -3,7 +3,7 @@ version: 1.0
 services:
   - repo-name: paisen01/read.news
     handler: "handler" 
-    script: "~/scripts/readnews.sh"
+    script: "/home/centos/scripts/readnews.sh"
     args: "-args"
   - repo-name: paisen02/read.news
     handler: "cmd2" 

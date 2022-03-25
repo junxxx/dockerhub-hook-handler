@@ -49,8 +49,7 @@ func HookHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
-	// todo run in another goroutine
-	runTask(payload)
+	go runTask(payload)
 	log.Println("payload", payload)
 }
 
