@@ -2,7 +2,6 @@ package internal
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -36,9 +35,7 @@ type CallBackPayload struct {
 // ignore other col
 type Payload struct {
 	CallbackUrl string `json:"callback_url"`
-	// PushData    struct {
-	// } `json:"push_data"`
-	Repository struct {
+	Repository  struct {
 		RepoUrl  string `json:"repo_url"`
 		Name     string `json:"name"`
 		RepoName string `json:"repo_name"`
@@ -52,14 +49,28 @@ func HookHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
+	// todo run in another goroutine
 	runTask(payload)
 	log.Println("payload", payload)
 }
 
+func (p *Payload) getScript() string {
+	config := GetConf()
+	for _, c := range config.Services {
+		if c.RepoName == p.Repository.RepoName {
+			return c.Script
+		}
+	}
+	return ""
+}
+
 // run the correspond task
 func runTask(p Payload) {
-	runner.RunAndWait("touch", "test.txt")
-	fmt.Println("pull the latest image and run it")
+	script := p.getScript()
+	log.Println("run local script:", script)
+	if script != "" {
+		runner.RunAndWait(script)
+	}
 }
 
 func callBack() {
